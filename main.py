@@ -7,6 +7,7 @@ from typing import Optional, List
 from config.base_de_datos import sesion, motor, base
 from modelos.ventas import Ventas as VentasModelo
 from jwt_config import dame_token, valida_token
+from typing import List
 
 
 app = FastAPI()
@@ -50,8 +51,8 @@ def mensaje():
     return HTMLResponse('<h2>Titulo</h2>')
 
 
-@app.get('/ventas', tags=['Ventas'], response_model=list[Ventas], status_code=200, dependencies=[Depends(Portador())])
-def dame_ventas() -> list[Ventas]:
+@app.get('/ventas', tags=['Ventas'], response_model=List[Ventas], status_code=200, dependencies=[Depends(Portador())])
+def dame_ventas() -> List[Ventas]:
     db = sesion()
     resultado = db.query(VentasModelo).all()
     return JSONResponse(status_code=200, content=jsonable_encoder(resultado))
@@ -66,8 +67,8 @@ def dame_venta_por_id(id: int = Path(ge=1, le=1000)) -> Ventas:
     
     return JSONResponse(status_code=200, content=jsonable_encoder(resultado))
  
-@app.get('/ventas/', tags=['Ventas'], response_model=list[Ventas], status_code=200)
-def dame_ventas_por_tienda(tienda: str = Query(min_length=4, max_length=20)) -> list[Ventas]:
+@app.get('/ventas/', tags=['Ventas'], response_model=List[Ventas], status_code=200)
+def dame_ventas_por_tienda(tienda: str = Query(min_length=4, max_length=20)) -> List[Ventas]:
     db = sesion()
     resultado = db.query(VentasModelo).filter(VentasModelo.tienda == tienda).all()
     if not resultado:
