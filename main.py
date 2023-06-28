@@ -18,6 +18,7 @@ class Usuario(BaseModel):
     email:str
     clave:str
     
+#class
 class Ventas(BaseModel):
     #id: int = Field(ge=0, le=20)
     id: Optional[int] =None
